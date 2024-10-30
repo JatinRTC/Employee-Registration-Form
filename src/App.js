@@ -1,25 +1,20 @@
-import logo from './logo.svg';
-import './App.css';
+import { Routes, Route} from 'react-router-dom';
+import Page1 from './Router/Page1.js';
+import Page2 from './Router/Page2.js';
+import Page3 from './Router/Page3.js';
+import { ThemeProvider } from 'styled-components';
+import theme from './Theme/theme.js';
 
-function App() {
+const  App = () => {
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
-  );
+    <ThemeProvider theme={theme}>
+        <Routes>
+          <Route path = '/' element ={<Page1 />} />
+          <Route path='/page2' element={<Page2 />} />
+          <Route path='/page3' element = {<Page3 />} />
+      </Routes>
+    </ThemeProvider>
+  )
 }
 
 export default App;
