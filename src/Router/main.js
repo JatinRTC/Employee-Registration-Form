@@ -4,11 +4,13 @@ import {
     FormControlLabel, RadioGroup, Radio, MenuItem, Select, InputLabel, FormLabel
 } from '@mui/material';
 import { useDispatch, useSelector } from 'react-redux';
+import { useNavigate } from 'react-router-dom';
 import Snackbar from '@mui/material/Snackbar';
 import Alert from '@mui/material/Alert';
 import { submitForm,resetForm,updateFormData } from '../Component/Slice';
 
 const Page2 = () => {
+    const navigate = useNavigate();
     const dispatch = useDispatch();
     const { formData, status } = useSelector((state) => state.form);
     const [open, setOpen] = React.useState(false);
@@ -26,6 +28,9 @@ const Page2 = () => {
                 dispatch(resetForm());
             }
         });
+        setTimeout(()=>{
+            navigate('/employeesData');
+        },3000);
     };
 
     const handleClose = (event, reason) => {
@@ -131,7 +136,7 @@ const Page2 = () => {
                       onClose={handleClose}
                       severity="success"
                       variant="filled"
-                      sx={{ width: '100%' }}
+                      sx={{ width: '100%'}}
                     >
                     Submitted Your Form
                     </Alert>

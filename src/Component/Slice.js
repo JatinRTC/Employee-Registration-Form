@@ -1,20 +1,19 @@
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
+import axios from 'axios';
 
 export const submitForm = createAsyncThunk(
     'form/submitForm',
     async (formData, { rejectWithValue }) => {
         try {
-            const response = await fetch('http://localhost:3001/entries', {
-                method: 'POST',
+            const response = await axios.post('http://localhost:3001/entries', formData, {
                 headers: {
                     'Content-Type': 'application/json',
-                },
-                body: JSON.stringify(formData),
+                }
             });
-            if (!response.ok) throw new Error('Form submission failed');
-            return await response.json();
+
+            return response.data;  
         } catch (error) {
-            return rejectWithValue(error.message);
+            return rejectWithValue(error.response ? error.response.data : error.message);
         }
     }
 );
@@ -33,7 +32,7 @@ const formSlice = createSlice({
             pincode: '',
             describe: ''
         },
-        status: 'idle', // can be 'idle' | 'loading' | 'succeeded' | 'failed'
+        status: 'idle',
         error: null,
     },
     reducers: {

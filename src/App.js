@@ -1,6 +1,7 @@
 import { Routes, Route} from 'react-router-dom';
-import Page1 from './Router/Page1.js';
-import Page2 from './Router/Page2.js';
+import Page1 from './Router/home.js';
+import Page2 from './Router/main.js';
+import Page3 from './Router/table.js';
 import { ThemeProvider } from 'styled-components';
 import theme from './Theme/theme.js';
 
@@ -9,7 +10,8 @@ const  App = () => {
     <ThemeProvider theme={theme}>
         <Routes>
           <Route path = '/' element ={<Page1 />} />
-          <Route path='/page2' element={<Page2 />} />
+          <Route path='/addEmployees' element={<Page2 />} />
+          <Route path='/employeesData' element={<Page3 />} />
       </Routes>
     </ThemeProvider>
   )

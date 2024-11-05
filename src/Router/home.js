@@ -6,7 +6,7 @@ const  Page1 = () => {
   const navigate = useNavigate();
 
   const handleClick = () => {
-    navigate('/page2');
+    navigate('/addEmployees');
   };
 
   return (
