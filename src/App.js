@@ -1,7 +1,7 @@
 import { Routes, Route} from 'react-router-dom';
 import Page1 from './Router/home.js';
 import Page2 from './Router/main.js';
-import Page3 from './Router/table.js';
+import Page3 from './Router/tableData.js';
 import { ThemeProvider } from 'styled-components';
 import theme from './Theme/theme.js';
 
@@ -18,3 +18,4 @@ const  App = () => {
 }
 
 export default App;
+
