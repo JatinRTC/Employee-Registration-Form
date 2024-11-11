@@ -7,6 +7,12 @@ export const fetchTableData = createAsyncThunk('tableData/fetchTableData', async
   return response.data;
 });
 
+export const deleteData = createAsyncThunk('tableData/deleteData', async (id) => {
+  await axios.delete(`http://localhost:3001/entries/${id}`);
+  return id;
+});
+
+
 const tableDataSlice = createSlice({
   name: 'tableData',
   initialState: {
@@ -28,7 +34,18 @@ const tableDataSlice = createSlice({
       .addCase(fetchTableData.rejected, (state, action) => {
         state.loading = false;
         state.error = action.error.message;
-      });
+      })
+
+
+      // DELETE BUTTON
+      .addCase(deleteData.fulfilled, (state, action) => {
+        state.data = state.data.filter((item) => item.id !== action.payload);
+      })
+      .addCase(deleteData.rejected, (state, action) => {
+        state.error = action.error.message;
+      })
+
+      
   },
 });
 
