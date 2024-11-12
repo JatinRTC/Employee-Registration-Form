@@ -1,27 +1,78 @@
 import React, { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { fetchTableData, deleteData,  } from '../Reducer/table.js';
-import { Table, TableBody, TableContainer, TableHead, TableRow, Paper, CircularProgress, Button, Container } from '@mui/material';
+import { fetchTableData, deleteData, updateData } from '../Reducer/table.js';
+import { Table, TableBody, TableContainer, TableHead, TableRow, Paper,  Button, Container} from '@mui/material';
 import TableCellComponent from '../Component/tableApi.js';
 import DeleteIcon from '@mui/icons-material/Delete';
 import EditIcon from '@mui/icons-material/Edit';
+import ConfirmationDialog from '../POPUP/Deletedialog.js';
+import EditDialog from '../POPUP/EditDialog.js';
+import CustomizedSnackbars from '../Snakbar/update.js';
 
 const TableComponent = () => {
   const dispatch = useDispatch();
-  const { data, loading, error } = useSelector((state) => state.tableData);
+  const { data } = useSelector((state) => state.tableData);
+  const [open, setOpen] = useState(false);
+  const [currentItem, setCurrentItem] = useState({});
+  const [openDialog, setOpenDialog] = useState(false);
+  const [selectedId, setSelectedId] = useState(null);
 
   useEffect(() => {
     dispatch(fetchTableData());
   }, [dispatch]);
 
-  const handleDelete = (id) => {
-    dispatch(deleteData(id));
+  const handleEditChange = (item) => {
+    setCurrentItem({ id: item.id,
+        firstName: item.firstName,
+        lastName:item.lastName,
+        email:item.email,
+        phone:item.phone,
+        address:item.address,
+        gender:item.gender,
+        role:item.role,
+        experience:item.experience,
+        pincode:item.pincode,
+        describe:item.describe
+     });
+    setOpen(true);
+    
   };
 
+  const handleClose = () => {
+    setOpen(false);
+    setCurrentItem({});
+  };
+
+  const handleInputChange = (e) => {
+    const { name, value } = e.target;
+    setCurrentItem((prev) => ({ ...prev, [name]: value }));
+  };
+
+  const handleUpdate = () => {
+    const { id, firstName, lastName,email,phone,address,gender,role,experience,pincode,describe  } = currentItem;
+    dispatch(updateData({ id, updatedData: { firstName, lastName,email,phone,address,gender,role,experience,pincode,describe } }));
+    handleClose();
+    <CustomizedSnackbars /> 
+  };
+
+  const handleDelete = (id) => {
+    setSelectedId(id);
+    setOpenDialog(true);
+  };
+
+  const handleConfirmDelete = () => {
+    dispatch(deleteData(selectedId));
+    setOpenDialog(false);
+    setSelectedId(null);
+  }
+
+  const handleCloseDialog = () => {
+    setOpenDialog(false);
+    setSelectedId(null);
+  }
 
 
-  if (loading) return <CircularProgress />;
-  if (error) return <div>Error: {error}</div>;
+  
 
   return (
 
@@ -55,6 +106,7 @@ const TableComponent = () => {
                   variant="contained" 
                   color="success" 
                   sx={{ marginRight: '10px' }}
+                  onClick={() => handleEditChange(item)}
                 >
                   <EditIcon />
                 </Button>
@@ -75,7 +127,25 @@ const TableComponent = () => {
           ))}
         </TableBody>
       </Table>
+
+          <ConfirmationDialog 
+            open={openDialog}
+            onClose={handleCloseDialog}
+            onConfirm={handleConfirmDelete}
+          />
+          <EditDialog
+            open={open}
+            handleClose={handleClose}
+            currentItem={currentItem}
+            handleInputChange={handleInputChange}
+            handleUpdate={handleUpdate}
+          />
+
+          
+
     </TableContainer>
+    
+    
   );
 };
 

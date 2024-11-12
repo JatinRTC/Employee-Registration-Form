@@ -169,7 +169,6 @@ const Page2 = () => {
                     type="text"
                     multiline
                     rows={3}
-                    fullWidth
                     required
                     value={formData.describe}
                     onChange={handleChange}
