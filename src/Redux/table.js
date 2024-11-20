@@ -28,7 +28,7 @@ const tableDataSlice = createSlice({
   reducers: {},
   extraReducers: (builder) => {
     builder
-      .addCase(fetchTableData.pending, (state) => {
+      .addCase(fetchTableData.pending, (state,action) => {
         state.loading = true;
         state.error = null;
       })

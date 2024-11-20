@@ -1,7 +1,7 @@
 import { Routes, Route} from 'react-router-dom';
-import Page1 from './Router/home.js';
-import Page2 from './Router/main.js';
-import Page3 from './Router/tableData.js';
+import Page1 from './Router/registration.js';
+import Page2 from './Router/EmployeeRegistration.js';
+import Page3 from './Router/EmployeeRegistrationtableData.js';
 import { ThemeProvider } from 'styled-components';
 import theme from './Theme/theme.js';
 

@@ -9,7 +9,7 @@ const EditDialog = ({ open, handleClose, currentItem, handleInputChange, handleU
       open={open}
       onClose={handleClose}
     >
-      <DialogTitle>UPDATE EMPLOYEE INFORMATION </DialogTitle>
+      <DialogTitle variant="h5" align="center" color="success">UPDATE EMPLOYEE INFORMATION </DialogTitle>
       <DialogContent>
         <TextField
           name="firstName"
@@ -94,7 +94,7 @@ const EditDialog = ({ open, handleClose, currentItem, handleInputChange, handleU
       </DialogContent>
       <DialogActions >
         <Button onClick={handleClose} color="error" variant="contained">Cancel</Button>
-        <Button onClick={handleUpdate} color="success"  variant="contained">Update</Button>
+        <Button onClick={handleUpdate} color="success"  variant="contained"  >Update</Button>
       </DialogActions>
     </Dialog>
   );

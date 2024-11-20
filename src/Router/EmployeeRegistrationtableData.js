@@ -1,13 +1,12 @@
 import React, { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { fetchTableData, deleteData, updateData } from '../Reducer/table.js';
-import { Table, TableBody, TableContainer, TableHead, TableRow, Paper,  Button, Container} from '@mui/material';
+import { fetchTableData, deleteData, updateData } from '../Redux/table.js';
+import { Table, TableBody, TableContainer, TableHead, TableRow, Paper,  Button, Container, Snackbar, Alert} from '@mui/material';
 import TableCellComponent from '../Component/tableApi.js';
 import DeleteIcon from '@mui/icons-material/Delete';
 import EditIcon from '@mui/icons-material/Edit';
 import ConfirmationDialog from '../POPUP/Deletedialog.js';
 import EditDialog from '../POPUP/EditDialog.js';
-import CustomizedSnackbars from '../Snakbar/update.js';
 
 const TableComponent = () => {
   const dispatch = useDispatch();
@@ -16,10 +15,12 @@ const TableComponent = () => {
   const [currentItem, setCurrentItem] = useState({});
   const [openDialog, setOpenDialog] = useState(false);
   const [selectedId, setSelectedId] = useState(null);
+  const [snackbarOpen, setSnackbarOpen] = useState(false);
+  const [snackbarOpenError, setSnackbarOpenError] = useState(false);
 
   useEffect(() => {
     dispatch(fetchTableData());
-  }, [dispatch]);
+  },[dispatch]);
 
   const handleEditChange = (item) => {
     setCurrentItem({ id: item.id,
@@ -52,7 +53,11 @@ const TableComponent = () => {
     const { id, firstName, lastName,email,phone,address,gender,role,experience,pincode,describe  } = currentItem;
     dispatch(updateData({ id, updatedData: { firstName, lastName,email,phone,address,gender,role,experience,pincode,describe } }));
     handleClose();
-    <CustomizedSnackbars /> 
+    setTimeout(() => {
+      setSnackbarOpen(true)
+    },1000);
+
+
   };
 
   const handleDelete = (id) => {
@@ -64,12 +69,23 @@ const TableComponent = () => {
     dispatch(deleteData(selectedId));
     setOpenDialog(false);
     setSelectedId(null);
+    setTimeout(() => {
+      setSnackbarOpenError(true)
+    },1000);
   }
 
   const handleCloseDialog = () => {
     setOpenDialog(false);
     setSelectedId(null);
   }
+
+  const handleSnackbarClose = () => {
+    setSnackbarOpen(false);
+  };
+  
+  const handleSnackbarCloseError = () => {
+    setSnackbarOpenError(false);
+  };
 
 
   
@@ -141,8 +157,25 @@ const TableComponent = () => {
             handleUpdate={handleUpdate}
           />
 
+          <Snackbar
+            open={snackbarOpen}
+            autoHideDuration={3000}
+            onClose={handleSnackbarClose}
+          >
+            <Alert onClose={handleSnackbarClose} severity="success" variant="filled" sx={{ width: '100%' }}>
+              Employee information updated successfully!
+            </Alert>
+          </Snackbar>
+          <Snackbar
+            open={snackbarOpenError}
+            autoHideDuration={3000}
+            onClose={handleSnackbarCloseError}
+          >
+            <Alert onClose={handleSnackbarCloseError} severity="success"  variant="filled" sx={{ width: '100%' }}>
+              Deleted Your Employees information 
+            </Alert>
+      </Snackbar>
           
-
     </TableContainer>
     
     
