@@ -10,8 +10,8 @@ export const submitForm = createAsyncThunk(
                     'Content-Type': 'application/json',
                 }
             });
-
-            return response.data;  
+            
+            return response.data;
         } catch (error) {
             return rejectWithValue(error.response ? error.response.data : error.message);
         }
@@ -61,18 +61,7 @@ const formSlice = createSlice({
             })
             .addCase(submitForm.fulfilled, (state) => {
                 state.status = 'succeeded';
-                state.formData = {
-                    firstName: '',
-                    lastName: '',
-                    email: '',
-                    phone: '',
-                    address: '',
-                    gender: '',
-                    role: '',
-                    experience: '',
-                    pincode: '',
-                    describe: ''
-                };
+
             })
             .addCase(submitForm.rejected, (state, action) => {
                 state.status = 'failed';

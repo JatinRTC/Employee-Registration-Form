@@ -1,46 +1,44 @@
 import React, { useEffect, useState } from 'react';
-import { useDispatch, useSelector } from 'react-redux';
-import { fetchTableData, deleteData, updateData } from '../Redux/table.js';
-import { Table, TableBody, TableContainer, TableHead, TableRow, Paper,  Button, Container, Snackbar, Alert} from '@mui/material';
+import {
+  Table, TableBody, TableContainer, TableHead, TableRow,
+  Button, Snackbar, Alert, Stack , Divider
+} from '@mui/material';
 import TableCellComponent from '../Component/tableApi.js';
 import DeleteIcon from '@mui/icons-material/Delete';
 import EditIcon from '@mui/icons-material/Edit';
 import ConfirmationDialog from '../POPUP/Deletedialog.js';
 import EditDialog from '../POPUP/EditDialog.js';
+import axios from 'axios';
 
 const TableComponent = () => {
-  const dispatch = useDispatch();
-  const { data } = useSelector((state) => state.tableData);
-  const [open, setOpen] = useState(false);
+  const [data, setData] = useState([]);
+  const [openEditDialog, setOpenEditDialog] = useState(false);
   const [currentItem, setCurrentItem] = useState({});
-  const [openDialog, setOpenDialog] = useState(false);
+  const [openDeleteDialog, setOpenDeleteDialog] = useState(false);
   const [selectedId, setSelectedId] = useState(null);
   const [snackbarOpen, setSnackbarOpen] = useState(false);
   const [snackbarOpenError, setSnackbarOpenError] = useState(false);
 
   useEffect(() => {
-    dispatch(fetchTableData());
-  },[dispatch]);
+    const fetchData = async () => {
+      try {
+        const response = await axios.get('http://localhost:3001/entries');
+        setData(response.data);
+      } catch (error) {
+        console.error('Error fetching data:', error);
+      }
+    };
 
-  const handleEditChange = (item) => {
-    setCurrentItem({ id: item.id,
-        firstName: item.firstName,
-        lastName:item.lastName,
-        email:item.email,
-        phone:item.phone,
-        address:item.address,
-        gender:item.gender,
-        role:item.role,
-        experience:item.experience,
-        pincode:item.pincode,
-        describe:item.describe
-     });
-    setOpen(true);
-    
+    fetchData();
+  }, []);
+
+  const handleEditOpen = (item) => {
+    setCurrentItem(item);
+    setOpenEditDialog(true);
   };
 
-  const handleClose = () => {
-    setOpen(false);
+  const handleEditClose = () => {
+    setOpenEditDialog(false);
     setCurrentItem({});
   };
 
@@ -49,61 +47,53 @@ const TableComponent = () => {
     setCurrentItem((prev) => ({ ...prev, [name]: value }));
   };
 
-  const handleUpdate = () => {
-    const { id, firstName, lastName,email,phone,address,gender,role,experience,pincode,describe  } = currentItem;
-    dispatch(updateData({ id, updatedData: { firstName, lastName,email,phone,address,gender,role,experience,pincode,describe } }));
-    handleClose();
-    setTimeout(() => {
-      setSnackbarOpen(true)
-    },1000);
-
-
+  const handleUpdate = async () => {
+    try {
+      const { id, ...updatedData } = currentItem;
+      await axios.put(`http://localhost:3001/entries/${id}`, updatedData);
+      setData((prevData) =>
+        prevData.map((item) => (item.id === id ? { id, ...updatedData } : item))
+      );
+      handleEditClose();
+      setSnackbarOpen(true);
+    } catch (error) {
+      console.error('Update failed:', error);
+    }
   };
 
   const handleDelete = (id) => {
     setSelectedId(id);
-    setOpenDialog(true);
+    setOpenDeleteDialog(true);
   };
 
-  const handleConfirmDelete = () => {
-    dispatch(deleteData(selectedId));
-    setOpenDialog(false);
-    setSelectedId(null);
-    setTimeout(() => {
-      setSnackbarOpenError(true)
-    },1000);
-  }
-
-  const handleCloseDialog = () => {
-    setOpenDialog(false);
-    setSelectedId(null);
-  }
-
-  const handleSnackbarClose = () => {
-    setSnackbarOpen(false);
+  const handleConfirmDelete = async () => {
+    try {
+      await axios.delete(`http://localhost:3001/entries/${selectedId}`);
+      setData((prev) => prev.filter((item) => item.id !== selectedId));
+      setOpenDeleteDialog(false);
+      setSnackbarOpenError(true);
+    } catch (error) {
+      console.error('Delete failed:', error);
+    }
   };
-  
-  const handleSnackbarCloseError = () => {
-    setSnackbarOpenError(false);
-  };
-
-
-  
 
   return (
-
-    <TableContainer component={Paper} sx={{ padding: '30px', overflow: 'auto' }}>
-      <Table sx={{   width: '100%' }}>
-        <TableHead >
-          <TableRow  sx={{ backgroundColor: '#6b7b8c54' }}>
-            {['ID', 'FirstName', 'LastName', 'Email', 'Phone', 'Address', 'Gender', 'Role', 'Experience', 'Pincode', 'Describe','Action'].map((header) => (
-              <TableCellComponent key={header} value={header}  align="center" sx={{fontWeight: 'bold' }} />
+    <TableContainer sx={{ padding: '30px', overflow: 'auto' }}>
+      <Table>
+        <TableHead>
+          <TableRow sx={{ backgroundColor: '#6b7b8c54' }}>
+            {[
+              'ID', 'First Name', 'Last Name', 'Email', 'Phone', 'Address',
+              'Gender', 'Role', 'Experience', 'Pincode', 'Describe', 'Action'
+            ].map((header) => (
+              <TableCellComponent key={header} value={header} align="center" sx={{ fontWeight: 'bold' }} />
             ))}
           </TableRow>
         </TableHead>
-        <TableBody >
+
+        <TableBody>
           {data.map((item) => (
-            <TableRow  key={item.id}  sx={{ '&:hover': { backgroundColor: '#6b7b8c54' }, cursor: 'pointer' }}>
+            <TableRow key={item.id} sx={{ '&:hover': { backgroundColor: '#fafafa' }, cursor: 'pointer' }}>
               <TableCellComponent value={item.id} />
               <TableCellComponent value={item.firstName} />
               <TableCellComponent value={item.lastName} />
@@ -115,70 +105,51 @@ const TableComponent = () => {
               <TableCellComponent value={item.experience} />
               <TableCellComponent value={item.pincode} />
               <TableCellComponent value={item.describe} />
-              <TableCellComponent 
+              <TableCellComponent
+                align="center"
                 value={
-                  <Container sx={{display:'flex', direction:'row'}}  >
-                  <Button  
-                  variant="contained" 
-                  color="success" 
-                  sx={{ marginRight: '10px' }}
-                  onClick={() => handleEditChange(item)}
-                >
-                  <EditIcon />
-                </Button>
-                <Button 
-                  variant="contained" 
-                  color="error"
-
-                  onClick={() => handleDelete(item.id)}
-                >
-                  <DeleteIcon />
-                </Button>
-                  </Container>
-                } 
-                align="center" 
+                  <Stack direction="row" spacing={1} justifyContent="center">
+                    <Button variant="contained" color="primary" onClick={() => handleEditOpen(item)}>
+                      <EditIcon />
+                    </Button>
+                    <Divider orientation="vertical" variant="middle" sx={{border:1.2  ,color: '#a2acb0'}} flexItem />
+                    <Button variant="contained" color="error" onClick={() => handleDelete(item.id)}>
+                      <DeleteIcon />
+                    </Button>
+                  </Stack>
+                }
               />
-              
             </TableRow>
           ))}
         </TableBody>
       </Table>
 
-          <ConfirmationDialog 
-            open={openDialog}
-            onClose={handleCloseDialog}
-            onConfirm={handleConfirmDelete}
-          />
-          <EditDialog
-            open={open}
-            handleClose={handleClose}
-            currentItem={currentItem}
-            handleInputChange={handleInputChange}
-            handleUpdate={handleUpdate}
-          />
+      <EditDialog
+        open={openEditDialog}
+        handleClose={handleEditClose}
+        currentItem={currentItem}
+        handleInputChange={handleInputChange}
+        handleUpdate={handleUpdate}
+      />
 
-          <Snackbar
-            open={snackbarOpen}
-            autoHideDuration={3000}
-            onClose={handleSnackbarClose}
-          >
-            <Alert onClose={handleSnackbarClose} severity="success" variant="filled" sx={{ width: '100%' }}>
-              Employee information updated successfully!
-            </Alert>
-          </Snackbar>
-          <Snackbar
-            open={snackbarOpenError}
-            autoHideDuration={3000}
-            onClose={handleSnackbarCloseError}
-          >
-            <Alert onClose={handleSnackbarCloseError} severity="success"  variant="filled" sx={{ width: '100%' }}>
-              Deleted Your Employees information 
-            </Alert>
+      <ConfirmationDialog
+        open={openDeleteDialog}
+        onClose={() => setOpenDeleteDialog(false)}
+        onConfirm={handleConfirmDelete}
+      />
+
+      <Snackbar open={snackbarOpen} autoHideDuration={3000} onClose={() => setSnackbarOpen(false)}>
+        <Alert onClose={() => setSnackbarOpen(false)} severity="primary" variant="filled" sx={{ width: '100%' }}>
+          Employee information updated successfully!
+        </Alert>
       </Snackbar>
-          
+
+      <Snackbar open={snackbarOpenError} autoHideDuration={3000} onClose={() => setSnackbarOpenError(false)}>
+        <Alert onClose={() => setSnackbarOpenError(false)} severity="info" variant="filled" sx={{ width: '100%' }}>
+          Employee deleted successfully!
+        </Alert>
+      </Snackbar>
     </TableContainer>
-    
-    
   );
 };
 

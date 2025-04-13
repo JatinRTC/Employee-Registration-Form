@@ -1,4 +1,3 @@
-// Dialog.js
 import React from "react";
 import { Dialog, DialogActions, DialogContent, DialogTitle, TextField, Button} from "@mui/material";
 
@@ -9,7 +8,7 @@ const EditDialog = ({ open, handleClose, currentItem, handleInputChange, handleU
       open={open}
       onClose={handleClose}
     >
-      <DialogTitle variant="h5" align="center" color="success">UPDATE EMPLOYEE INFORMATION </DialogTitle>
+      <DialogTitle variant="h5" align="center" color="primary">UPDATE EMPLOYEE INFORMATION </DialogTitle>
       <DialogContent>
         <TextField
           name="firstName"
@@ -94,7 +93,7 @@ const EditDialog = ({ open, handleClose, currentItem, handleInputChange, handleU
       </DialogContent>
       <DialogActions >
         <Button onClick={handleClose} color="error" variant="contained">Cancel</Button>
-        <Button onClick={handleUpdate} color="success"  variant="contained"  >Update</Button>
+        <Button onClick={handleUpdate} color="primary"  variant="contained"  >Update</Button>
       </DialogActions>
     </Dialog>
   );

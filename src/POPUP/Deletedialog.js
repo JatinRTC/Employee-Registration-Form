@@ -1,4 +1,3 @@
-// Dialog.js
 import React from "react";
 import { Dialog,DialogTitle, DialogActions, DialogContent, DialogContentText,  IconButton } from "@mui/material";
 import CloseIcon from '@mui/icons-material/Close';
@@ -9,7 +8,6 @@ const ConfirmationDialog = ({ open, onClose, onConfirm}) => {
     <Dialog
       open={open}
       onClose={onClose}
-      
     >
       <DialogTitle>Confirm Deletion</DialogTitle>
       <DialogContent>

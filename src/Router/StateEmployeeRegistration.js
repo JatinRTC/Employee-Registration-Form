@@ -1,33 +1,48 @@
 import React, { useState } from 'react';
 import { TextField, Container, FormControlLabel, RadioGroup, Radio, MenuItem, Select, InputLabel, FormLabel } from '@mui/material';
-import { useDispatch, useSelector } from 'react-redux';
 import TextLabel from '../Component/textFiled.js';
 import Snackbar from '@mui/material/Snackbar';
 import Alert from '@mui/material/Alert';
-import { submitForm, resetForm, updateFormData } from '../Redux/FormSlice.js';
 import { StyledBox, StyledBoxField, SubmitButton, RadioButtonContainer, StyledTypography } from '../Style/style.js';
+import axios from 'axios';
 
-const Page2 = () => {
-    const dispatch = useDispatch();
-    const { formData } = useSelector((state) => state.form);
+const initialFormData = {
+    firstName: '',
+    lastName: '',
+    email: '',
+    phone: '',
+    address: '',
+    gender: '',
+    role: '',
+    experience: '',
+    pincode: '',
+    describe: ''
+}
+
+const StateEmployeeRegistration = () => {
     const [open, setOpen] = useState(false);
     const [errors, setErrors] = useState({});
+    const [formData, setFormData] = useState(initialFormData)
 
     const handleChange = (e) => {
         const { name, value } = e.target;
-        dispatch(updateFormData({ [name]: value }));
+        setFormData((prev) => ({ ...prev, [name]: value }));
     };
-                                                                                                                                                                
+    
+
     const validationForm = () => {
         const errors = {};
+
         if (!/^[a-zA-Z\s]+$/.test(formData.firstName)) {
             alert(" First Name should only contain letter.");
             errors.firstName = "First Name should only contain letter";
         }
+
         if (!/^[a-zA-Z\s]+$/.test(formData.lastName)) {
             alert(" Last Name should only contain letter.");
             errors.lastName = "Last Name should only contain letter";
         }
+
         if ( !/^[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,4}$/.test(formData.email)) {
             alert(" Invalid Email Format");
             errors.email = "invalid email format";
@@ -36,31 +51,40 @@ const Page2 = () => {
             alert(" Please enter Phone number must  be a 10-digit number.");
             errors.phone = "Pincode must be a 10-digit number";
         }
+
         if (!/^\d{6}$/.test(formData.pincode)) {
             alert(" Please enter PIN CODE must  be a 6-digit number.");
             errors.pincode = "Pincode must be a 6-digit number";
         }
         return errors;
+
     }
-    const handleSubmit = (e) => {
+
+    const handleSubmit = async (e) => {
+        try {
         e.preventDefault();
         const formErrors = validationForm();
         if (Object.keys(formErrors).length > 0) {
             setErrors(formErrors);
             return;
         }
-    
-        dispatch(submitForm(formData)).then((action) => {
-            if (action.type === 'form/submitForm/fulfilled') {
-                setOpen(true);
-                dispatch(resetForm());
+        await axios.post(`http://localhost:3001/entries`, formData, {
+            headers: {
+                'Content-Type': 'application/json',
             }
-        });
+        }
+    );
+        setOpen(true);
+        setFormData(initialFormData);
+    } catch (error) {
+        console.error('Error submitting form:', error);
+    }
     };
 
     const handleClose = () => {
         setOpen(false);
     };
+
     return (
         <Container maxWidth="md">
             <StyledBox
@@ -157,6 +181,6 @@ const Page2 = () => {
             </StyledBox>
         </Container>
     );
-};  
+};
 
-export default Page2;
+export default StateEmployeeRegistration;
