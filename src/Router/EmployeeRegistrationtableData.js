@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import {
   Table, TableBody, TableContainer, TableHead, TableRow,
-  Button, Snackbar, Alert, Stack , Divider,
+  Button, Snackbar, Alert, Stack , 
 } from '@mui/material';
 import TableCellComponent from '../Component/tableApi.js';
 import DeleteIcon from '@mui/icons-material/Delete';
@@ -112,7 +112,6 @@ const TableComponent = () => {
                     <Button variant="contained" color="primary" onClick={() => handleEditOpen(item)}>
                       <EditIcon />
                     </Button>
-                    <Divider orientation="vertical" variant="middle" sx={{border:1.2  ,color: '#a2acb0'}} flexItem />
                     <Button variant="contained" color="error" onClick={() => handleDelete(item.id)}>
                       <DeleteIcon />
                     </Button>

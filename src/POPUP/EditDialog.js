@@ -92,7 +92,7 @@ const EditDialog = ({ open, handleClose, currentItem, handleInputChange, handleU
         />
       </DialogContent>
       <DialogActions >
-        <Button onClick={handleClose} color="error" variant="contained">Cancel</Button>
+        <Button onClick={handleClose} color="inherit"  variant="contained">Cancel</Button>
         <Button onClick={handleUpdate} color="primary"  variant="contained"  >Update</Button>
       </DialogActions>
     </Dialog>

@@ -132,10 +132,10 @@ const StateEmployeeRegistration = () => {
                     <InputLabel>Role</InputLabel>
                     <Select name="role" label="Role" value={formData.role} onChange={handleChange}>
                         <MenuItem value=""><em>Select</em></MenuItem>
-                        <MenuItem value="FullStack">Full Stack Developer</MenuItem>
-                        <MenuItem value="MernFullStack">MERN Full Stack Developer</MenuItem>
-                        <MenuItem value="Frontend">Frontend Developer</MenuItem>
-                        <MenuItem value="Backend">Backend Developer</MenuItem>
+                        <MenuItem value="FullStack Developer">Full Stack Developer</MenuItem>
+                        <MenuItem value="MernFullStack Developer">MERN Full Stack Developer</MenuItem>
+                        <MenuItem value="Frontend Developer">Frontend Developer</MenuItem>
+                        <MenuItem value="Backend Developer">Backend Developer</MenuItem>
                     </Select>
                 </RadioButtonContainer>
 

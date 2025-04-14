@@ -17,10 +17,10 @@ const ConfirmationDialog = ({ open, onClose, onConfirm}) => {
       </DialogContent>
       <DialogActions>
         <IconButton color="primary" onClick={onClose}>
-          <CloseIcon />
+          <CloseIcon fontSize="large" />
         </IconButton>
         <IconButton color="primary" onClick={onConfirm}>
-          <CheckIcon />
+          <CheckIcon fontSize="large" />
         </IconButton>
       </DialogActions>
     </Dialog>

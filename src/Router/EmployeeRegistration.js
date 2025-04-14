@@ -16,7 +16,7 @@ const Page2 = () => {
     const handleChange = (e) => {
         const { name, value } = e.target;
         dispatch(updateFormData({ [name]: value }));
-    };                                                                                                                                                       
+    };
     const validationForm = () => {
         const errors = {};
         if (!/^[a-zA-Z\s]+$/.test(formData.firstName)) {
@@ -27,7 +27,7 @@ const Page2 = () => {
             alert(" Last Name should only contain letter.");
             errors.lastName = "Last Name should only contain letter";
         }
-        if ( !/^[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,4}$/.test(formData.email)) {
+        if (!/^[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,4}$/.test(formData.email)) {
             alert(" Invalid Email Format");
             errors.email = "invalid email format";
         }
@@ -48,7 +48,7 @@ const Page2 = () => {
             setErrors(formErrors);
             return;
         }
-    
+
         dispatch(submitForm(formData)).then((action) => {
             if (action.type === 'form/submitForm/fulfilled') {
                 setOpen(true);
@@ -107,10 +107,10 @@ const Page2 = () => {
                     <InputLabel>Role</InputLabel>
                     <Select name="role" label="Role" value={formData.role} onChange={handleChange}>
                         <MenuItem value=""><em>Select</em></MenuItem>
-                        <MenuItem value="FullStack">Full Stack Developer</MenuItem>
-                        <MenuItem value="MernFullStack">MERN Full Stack Developer</MenuItem>
-                        <MenuItem value="Frontend">Frontend Developer</MenuItem>
-                        <MenuItem value="Backend">Backend Developer</MenuItem>
+                        <MenuItem value="FullStack Developer">Full Stack Developer</MenuItem>
+                        <MenuItem value="MernFullStack Developer">MERN Full Stack Developer</MenuItem>
+                        <MenuItem value="Frontend Developer">Frontend Developer</MenuItem>
+                        <MenuItem value="Backend Developer">Backend Developer</MenuItem>
                     </Select>
                 </RadioButtonContainer>
 
@@ -139,7 +139,7 @@ const Page2 = () => {
                     value={formData.describe}
                     onChange={handleChange}
                 />
-                                                                                                                                                                                                                                                                                                                                                                                                    
+
                 <SubmitButton type="submit" variant="contained" color="primary" size="large" >
                     Submit
                 </SubmitButton>
@@ -156,6 +156,6 @@ const Page2 = () => {
             </StyledBox>
         </Container>
     );
-};  
+};
 
 export default Page2;
