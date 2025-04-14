@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import {
   Table, TableBody, TableContainer, TableHead, TableRow,
-  Button, Snackbar, Alert, Stack , Divider
+  Button, Snackbar, Alert, Stack , Divider,
 } from '@mui/material';
 import TableCellComponent from '../Component/tableApi.js';
 import DeleteIcon from '@mui/icons-material/Delete';
@@ -78,12 +78,12 @@ const TableComponent = () => {
   };
 
   return (
-    <TableContainer sx={{ padding: '30px', overflow: 'auto' }}>
+    <TableContainer  sx={{ padding: '30px', overflow: 'auto' }}>
       <Table>
         <TableHead>
           <TableRow sx={{ backgroundColor: '#6b7b8c54' }}>
             {[
-              'ID', 'First Name', 'Last Name', 'Email', 'Phone', 'Address',
+              'Id', 'Firstname', 'Lastname', 'Email', 'Phone', 'Address',
               'Gender', 'Role', 'Experience', 'Pincode', 'Describe', 'Action'
             ].map((header) => (
               <TableCellComponent key={header} value={header} align="center" sx={{ fontWeight: 'bold' }} />

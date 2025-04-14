@@ -22,7 +22,7 @@ const Page1 = () => {
     <BoxSide>
       <Stack mt={3} alignItems="center">
         <Title variant="h3" component="h1" gutterBottom>
-          Employee Registration Form
+          EMPLOYEE REGISTRATION FORM
         </Title>
       </Stack>
       <Stack direction="row" spacing={2} justifyContent="center" mt={2}>

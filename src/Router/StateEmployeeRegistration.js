@@ -15,8 +15,8 @@ const initialFormData = {
     gender: '',
     role: '',
     experience: '',
-    pincode: '',
-    describe: ''
+    pincode: '',        
+    describe: ''                                
 }
 
 const StateEmployeeRegistration = () => {

@@ -16,8 +16,7 @@ const Page2 = () => {
     const handleChange = (e) => {
         const { name, value } = e.target;
         dispatch(updateFormData({ [name]: value }));
-    };
-                                                                                                                                                                
+    };                                                                                                                                                       
     const validationForm = () => {
         const errors = {};
         if (!/^[a-zA-Z\s]+$/.test(formData.firstName)) {
